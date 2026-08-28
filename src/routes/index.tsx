@@ -26,18 +26,24 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
+  const [showIntro, setShowIntro] = useState(true);
+
   return (
-    <iframe
-      src="/panda.html"
-      title="Talking Panda"
-      allow="microphone; autoplay"
-      style={{
-        position: "fixed",
-        inset: 0,
-        width: "100%",
-        height: "100%",
-        border: "none",
-      }}
-    />
+    <>
+      {showIntro && <SplashScreen onDone={() => setShowIntro(false)} />}
+      <iframe
+        src="/panda.html"
+        title="Talking Panda"
+        allow="microphone; autoplay"
+        style={{
+          position: "fixed",
+          inset: 0,
+          width: "100%",
+          height: "100%",
+          border: "none",
+        }}
+      />
+    </>
+
   );
 }
