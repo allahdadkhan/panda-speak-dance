@@ -37,7 +37,7 @@ function playJingle(letterCount: number) {
   // one playful blip per letter, rising pentatonic run
   const scale = [523.25, 587.33, 659.25, 783.99, 880, 1046.5];
   for (let i = 0; i < letterCount; i++) {
-    blip(t0 + (i * LETTER_STEP) / 1000, scale[i % scale.length]);
+    blip(t0 + (i * LETTER_STEP) / 1000, scale[i % scale.length]!);
   }
 
   // happy chord sparkle at the end
