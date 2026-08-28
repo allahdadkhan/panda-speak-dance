@@ -82,33 +82,40 @@ export function SplashScreen({ onDone }: { onDone: () => void }) {
     };
   }, [onDone]);
 
-  const renderWord = (word: string, offset: number) =>
-    word.split("").map((ch, i) => (
-      <span
-        key={`${word}-${i}`}
-        className="splash-letter"
-        style={{ animationDelay: `${(offset + i) * LETTER_STEP}ms` }}
-      >
-        {ch}
-      </span>
-    ));
+  const title = `${WORD_ONE} ${WORD_TWO}`;
+  const chars = title.split("");
+  const spread = 108; // total arc sweep in degrees
+  const step = spread / (chars.length - 1);
 
   return (
     <div className={`splash-root${leaving ? " splash-leaving" : ""}`}>
       <div className="splash-glow" aria-hidden="true" />
-      <h1 className="splash-title">
-        <span className="splash-word">{renderWord(WORD_ONE, 0)}</span>
-        <span className="splash-word splash-word-2">
-          {renderWord(WORD_TWO, WORD_ONE.length)}
-        </span>
-      </h1>
-      <img
-        src={pandaSplash}
-        alt="Cute cartoon panda mascot waving"
-        width={816}
-        height={816}
-        className="splash-panda"
-      />
+      <div className="splash-stage">
+        <h1 className="splash-arc" aria-label={title}>
+          {chars.map((ch, i) => (
+            <span
+              key={`${ch}-${i}`}
+              className="splash-arc-slot"
+              style={{ transform: `rotate(${-spread / 2 + i * step}deg)` }}
+              aria-hidden="true"
+            >
+              <span
+                className={`splash-letter${i >= WORD_ONE.length + 1 ? " splash-letter-2" : ""}`}
+                style={{ animationDelay: `${i * LETTER_STEP}ms` }}
+              >
+                {ch === " " ? "\u00a0" : ch}
+              </span>
+            </span>
+          ))}
+        </h1>
+        <img
+          src={pandaSplash}
+          alt="Cute cartoon panda mascot waving"
+          width={816}
+          height={816}
+          className="splash-panda"
+        />
+      </div>
     </div>
   );
 }
