@@ -189,7 +189,7 @@
   --arc-radius: clamp(230px, 62vw, 420px);
   position: absolute;
   left: 50%;
-  bottom: 82%;
+  bottom: 96%;
   width: 0;
   height: 0;
   margin: 0;
@@ -232,7 +232,7 @@
 
 .splash-panda {
   position: relative;
-  width: clamp(420px, 135vw, 900px);
+  width: clamp(300px, 78vw, 480px);
   max-width: none;
   flex: 0 0 auto;
   height: auto;

@@ -109,8 +109,8 @@ export function SplashScreen({ onDone }: { onDone: () => void }) {
         <img
           src={pandaSplash}
           alt="Cute cartoon panda mascot waving"
-          width={816}
-          height={816}
+          width={600}
+          height={738}
           className="splash-panda"
         />
       </div>
