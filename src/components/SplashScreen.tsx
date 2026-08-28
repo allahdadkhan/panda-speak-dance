@@ -82,7 +82,7 @@ export function SplashScreen({ onDone }: { onDone: () => void }) {
 
   const title = `${WORD_ONE} ${WORD_TWO}`;
   const chars = title.split("");
-  const spread = 108; // total arc sweep in degrees
+  const spread = 94; // total arc sweep in degrees
   const step = spread / (chars.length - 1);
 
   return (
