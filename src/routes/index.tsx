@@ -1,4 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
+import { SplashScreen } from "@/components/SplashScreen";
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
