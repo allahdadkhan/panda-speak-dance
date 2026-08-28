@@ -177,28 +177,39 @@
   50% { transform: scale(1.05); opacity: 0.9; }
 }
 
-.splash-title {
+.splash-stage {
   position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.splash-arc {
+  --arc-radius: clamp(150px, 46vw, 300px);
+  position: absolute;
+  left: 50%;
+  bottom: 78%;
+  width: 0;
+  height: 0;
   margin: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  line-height: 0.95;
   font-weight: 900;
-  letter-spacing: 0.04em;
-  text-align: center;
-  transform-style: preserve-3d;
+  font-size: clamp(1.9rem, 8.5vw, 4.2rem);
+  letter-spacing: 0.02em;
+  line-height: 1;
 }
 
-.splash-word {
-  display: flex;
-  font-size: clamp(2.6rem, 13vw, 7rem);
+.splash-arc-slot {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  transform-origin: 50% var(--arc-radius);
 }
 
-.splash-word-2 {
-  font-size: clamp(3.4rem, 17vw, 9rem);
-  color: #ffe066;
+.splash-arc-slot > .splash-letter {
+  display: block;
+  transform: translateX(-50%);
 }
+
 
 .splash-letter {
   display: inline-block;
