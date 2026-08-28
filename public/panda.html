@@ -1327,7 +1327,6 @@ function initLoco(){
    'mixamorigSpine','mixamorigSpine1','mixamorigSpine2','mixamorigNeck','mixamorigHead',
    'mixamorigLeftHand','mixamorigRightHand'].forEach(n=>remember(bone(n)));
   collectBlinkTargets();
-  collectMouthTargets();
 
   /* measure the real leg so the stride length matches the distance travelled */
   const up = bone('mixamorigLeftUpLeg'), kn = bone('mixamorigLeftLeg'), ft = bone('mixamorigLeftFoot');
@@ -1546,54 +1545,6 @@ function updateBlink(dt){
   blinkTargets.forEach(b=>{ if (b.mesh.morphTargetInfluences) b.mesh.morphTargetInfluences[b.idx] = 0; });
   return 0;
 }
-
-/* ---- talking mouth (no mouth bone needed: uses mouth morphs, else the mouth mesh) ----
-   While the panda replays the voice the mouth cycles open -> closed -> open -> closed,
-   with the amount driven by the live loudness of the playback so it lands naturally. */
-let mouthMorphs = [], mouthMeshes = [], mouthOpen = 0, mouthPhase = 0, mouthLevel = 0;
-function collectMouthTargets(){
-  mouthMorphs = []; mouthMeshes = [];
-  if (!panda) return;
-  panda.traverse(o=>{
-    if (!o.isMesh) return;
-    if (o.morphTargetDictionary){
-      for (const name in o.morphTargetDictionary){
-        if (/mouth.*open|open.*mouth|jaw.?open|viseme.?(aa|a$|o)|\baa\b|mouthopen/i.test(name))
-          mouthMorphs.push({ mesh:o, idx:o.morphTargetDictionary[name] });
-      }
-    }
-    /* mesh fallback: gently stretch the mouth geometry itself */
-    if (!mouthMorphs.length && /mouth|muzzle|lip|jaw|tongue/i.test(o.name || '')){
-      o.userData.mouthBaseScale = o.userData.mouthBaseScale || o.scale.clone();
-      mouthMeshes.push(o);
-    }
-  });
-}
-function updateMouth(dt){
-  const talking = playing && performance.now() < talkUntil;
-  let target = 0;
-  if (talking){
-    /* loudness of the playback, smoothed, so quiet moments close the mouth */
-    const lvl = Math.min(1, levelOf(playAnalyser) * 7);
-    mouthLevel += (lvl - mouthLevel) * Math.min(1, dt*12);
-    mouthPhase += dt * 6.0;                       // ~3 open/close cycles a second
-    const cycle = 0.5 - 0.5*Math.cos(mouthPhase); // 0 (closed) -> 1 (open) -> 0 ...
-    target = Math.min(1, cycle * (0.25 + mouthLevel));
-  } else {
-    mouthLevel = 0; mouthPhase = 0;
-  }
-  mouthOpen += (target - mouthOpen) * Math.min(1, dt*14);
-  if (mouthOpen < 0.001) mouthOpen = 0;
-
-  const v = mouthOpen * 0.55;                     // keep it subtle
-  mouthMorphs.forEach(m=>{ if (m.mesh.morphTargetInfluences) m.mesh.morphTargetInfluences[m.idx] = v; });
-  mouthMeshes.forEach(m=>{
-    const b = m.userData.mouthBaseScale; if (!b) return;
-    m.scale.set(b.x * (1 - v*0.05), b.y * (1 + v*0.35), b.z * (1 + v*0.06));
-  });
-}
-
-
 
 /* ---- living idle: breathing, head turns, tail wag, ear flicks, little hops ---- */
 let idleT = 0, idleYaw = 0, lookYaw = 0, lookYawTarget = 0, nextLook = 3;
@@ -2066,7 +2017,6 @@ function tick(){
       panda.position.set(loco.home.x, panda.userData.baseY ?? panda.position.y, loco.home.z);
       applyDancePose(danceTime, partyBlend);
       updateBlink(dt);
-      updateMouth(dt);
       if (reaction) applyReactionPose(dt);
     } else {
       updateIdleBehaviour(dt);
@@ -2076,7 +2026,6 @@ function tick(){
       applyBalloonPose();                    // sit + play, only while the balloon is out
 
       updateBlink(dt);
-      updateMouth(dt);
       if (reaction) applyReactionPose(dt);   // taps own the body pose while they last
       groundFeet();                          // soles always locked to the floor line
     }
