@@ -186,15 +186,15 @@
 }
 
 .splash-arc {
-  --arc-radius: clamp(230px, 62vw, 420px);
+  --arc-radius: clamp(200px, 56vw, 380px);
   position: absolute;
   left: 50%;
-  bottom: 96%;
+  bottom: 108%;
   width: 0;
   height: 0;
   margin: 0;
   font-weight: 900;
-  font-size: clamp(1.9rem, 8.5vw, 4.2rem);
+  font-size: clamp(1.5rem, 6.6vw, 3.4rem);
   letter-spacing: 0.02em;
   line-height: 1;
 }
@@ -232,7 +232,7 @@
 
 .splash-panda {
   position: relative;
-  width: clamp(300px, 78vw, 480px);
+  width: clamp(280px, 70vw, 430px);
   max-width: none;
   flex: 0 0 auto;
   height: auto;
