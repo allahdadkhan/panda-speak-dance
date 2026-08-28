@@ -36,25 +36,23 @@ function playJingle(letterCount: number) {
 
   // one playful blip per letter, rising pentatonic run
   const scale = [523.25, 587.33, 659.25, 783.99, 880, 1046.5];
-  for (let i = 0; i < letterCount; i++) {
-    blip(t0 + (i * LETTER_STEP) / 1000, scale[i % scale.length]!);
-  }
-
-  // happy chord sparkle at the end
-  const end = t0 + (letterCount * LETTER_STEP) / 1000 + 0.15;
-  [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => {
+  // bright chord at the very start, together with the first letter
+  [523.25, 659.25, 783.99].forEach((f) => {
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
     osc.type = "sine";
     osc.frequency.value = f;
-    gain.gain.setValueAtTime(0.0001, end + i * 0.05);
-    gain.gain.exponentialRampToValueAtTime(0.5, end + i * 0.05 + 0.03);
-    gain.gain.exponentialRampToValueAtTime(0.0001, end + 0.9);
+    gain.gain.setValueAtTime(0.0001, t0);
+    gain.gain.exponentialRampToValueAtTime(0.4, t0 + 0.03);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.7);
     osc.connect(gain);
     gain.connect(master);
-    osc.start(end + i * 0.05);
-    osc.stop(end + 1);
+    osc.start(t0);
+    osc.stop(t0 + 0.8);
   });
+  for (let i = 0; i < letterCount; i++) {
+    blip(t0 + (i * LETTER_STEP) / 1000, scale[i % scale.length]!);
+  }
 
   void ctx.resume();
   window.setTimeout(() => void ctx.close(), (TOTAL + 500));
@@ -84,7 +82,7 @@ export function SplashScreen({ onDone }: { onDone: () => void }) {
 
   const title = `${WORD_ONE} ${WORD_TWO}`;
   const chars = title.split("");
-  const spread = 108; // total arc sweep in degrees
+  const spread = 94; // total arc sweep in degrees
   const step = spread / (chars.length - 1);
 
   return (
@@ -111,8 +109,8 @@ export function SplashScreen({ onDone }: { onDone: () => void }) {
         <img
           src={pandaSplash}
           alt="Cute cartoon panda mascot waving"
-          width={816}
-          height={816}
+          width={600}
+          height={738}
           className="splash-panda"
         />
       </div>
