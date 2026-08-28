@@ -1327,6 +1327,7 @@ function initLoco(){
    'mixamorigSpine','mixamorigSpine1','mixamorigSpine2','mixamorigNeck','mixamorigHead',
    'mixamorigLeftHand','mixamorigRightHand'].forEach(n=>remember(bone(n)));
   collectBlinkTargets();
+  collectMouthTargets();
 
   /* measure the real leg so the stride length matches the distance travelled */
   const up = bone('mixamorigLeftUpLeg'), kn = bone('mixamorigLeftLeg'), ft = bone('mixamorigLeftFoot');
@@ -2065,6 +2066,7 @@ function tick(){
       panda.position.set(loco.home.x, panda.userData.baseY ?? panda.position.y, loco.home.z);
       applyDancePose(danceTime, partyBlend);
       updateBlink(dt);
+      updateMouth(dt);
       if (reaction) applyReactionPose(dt);
     } else {
       updateIdleBehaviour(dt);
@@ -2074,6 +2076,7 @@ function tick(){
       applyBalloonPose();                    // sit + play, only while the balloon is out
 
       updateBlink(dt);
+      updateMouth(dt);
       if (reaction) applyReactionPose(dt);   // taps own the body pose while they last
       groundFeet();                          // soles always locked to the floor line
     }
